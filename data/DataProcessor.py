@@ -3,32 +3,44 @@ import os
 import numpy as np
 
 IMAGE_SIZE = 64
+TRAIN_WALDO = '{}/train_waldo'.format(IMAGE_SIZE)
+TRAIN_NOTWALDO = '{}/train_notwaldo'.format(IMAGE_SIZE)
+TEST_WALDO = '{}/test_waldo'.format(IMAGE_SIZE)
+TEST_NOTWALDO = '{}/test_notwaldo'.format(IMAGE_SIZE)
 
 
 class DataProcessor:
 
-    def __init__(self):
-        self.image_size = 64
-        self.train_waldo = '{}/train_waldo'.format(self.image_size)
-        self.train_notwaldo = '{}/train_notwaldo'.format(self.image_size)
-        self.test_waldo = '{}/test_waldo'.format(self.image_size)
-        self.test_notwaldo = '{}/test_notwaldo'.format(self.image_size)
+    @staticmethod
+    def load_train_grayscale():
+        waldo_x, waldo_y = DataProcessor._load_from_path_grayscale(TRAIN_WALDO, 0)
+        notwaldo_x, notwaldo_y = DataProcessor._load_from_path_grayscale(TRAIN_NOTWALDO, 1)
+        return np.concatenate((waldo_x, notwaldo_x)), np.concatenate((waldo_y, notwaldo_y))
 
-    def load_train_grayscale(self):
-        train_x = []
-        for image in os.listdir(self.train_waldo):
-            train_x.append(cv2.imread('{}/{}'.format(self.train_waldo, image), 0))
+    @staticmethod
+    def load_test_grayscale():
+        waldo_x, waldo_y = DataProcessor._load_from_path_grayscale(TEST_WALDO, 0)
+        notwaldo_x, notwaldo_y = DataProcessor._load_from_path_grayscale(TEST_NOTWALDO, 1)
+        return np.concatenate((waldo_x, notwaldo_x)), np.concatenate((waldo_y, notwaldo_y))
 
-        train_x = np.concatenate([image[np.newaxis] for image in train_x])
-        train_y = []
-        return train_x, train_y
+    @staticmethod
+    def _load_from_path_grayscale(path, label):
+        x = []
+        for image in os.listdir(path):
+            x.append(cv2.imread('{}/{}'.format(path, image), 0))
 
-    def load_test_grayscale(self):
-        test_x = []
-        test_y = []
-        return test_x, test_y
+        x = np.concatenate([image[np.newaxis, :] for image in x])
+        x = x[:, :, :, np.newaxis]
+
+        if label == 1:
+            y = np.ones(x.shape[0])
+        else:
+            y = np.zeros(x.shape[0])
+
+        return x, y
 
 
 if __name__ == '__main__':
-    data_processor = DataProcessor()
-    data_processor.load_train_grayscale()
+    train_x, train_y = DataProcessor.load_train_grayscale()
+    test_x, test_y = DataProcessor.load_test_grayscale()
+    print('')
