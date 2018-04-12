@@ -1,5 +1,6 @@
-import cv2
 import os
+
+import cv2
 import numpy as np
 
 IMAGE_SIZE = 64
@@ -9,7 +10,7 @@ TEST_WALDO = '{}/test_waldo'.format(IMAGE_SIZE)
 TEST_NOTWALDO = '{}/test_notwaldo'.format(IMAGE_SIZE)
 
 
-class DataProcessor:
+class DataProcessor(object):
 
     @staticmethod
     def load_train_grayscale():
@@ -38,9 +39,3 @@ class DataProcessor:
             y = np.zeros(x.shape[0])
 
         return x, y
-
-
-if __name__ == '__main__':
-    train_x, train_y = DataProcessor.load_train_grayscale()
-    test_x, test_y = DataProcessor.load_test_grayscale()
-    print('')
