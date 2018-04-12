@@ -7,7 +7,7 @@ class ModelManager(object):
 
     @staticmethod
     def get_model(image_dim_0, image_dim_1, number_of_channels):
-        x = Input((train_x.shape[1], train_x.shape[2], train_x.shape[3]))
+        x = Input((image_dim_0, image_dim_1, number_of_channels))
         c1 = Conv2D(filters=20,
                     kernel_size=(7, 7),
                     padding="same",

@@ -5,7 +5,7 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.utils import to_categorical
 
 from DataProcessor import DataProcessor
-from ModelV1 import Mode
+from ModelV1 import ModelManager
 
 # load data
 train_x, train_y = DataProcessor.load_train_grayscale()
