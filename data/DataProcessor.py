@@ -26,11 +26,14 @@ class DataProcessor:
         test_x = np.concatenate((test_waldo_x, test_notwaldo_x))
         test_y = np.concatenate((test_waldo_y, test_notwaldo_y))
 
+        train_x = train_x.astype("float32")
+        test_x = test_x.astype("float32")
+
         return train_x, train_y, test_x, test_y
 
     def preprocess_data(self, train_x, train_y, test_x, test_y):
         # augment training dataset
-        train_datagen = ImageDataGenerator(
+        datagen = ImageDataGenerator(
             featurewise_center=True,
             featurewise_std_normalization=True,
             rotation_range=20,
@@ -38,20 +41,18 @@ class DataProcessor:
             height_shift_range=0.2,
             horizontal_flip=True)
 
-        test_datagen = ImageDataGenerator()
-
         # compute quantities required for featurewise normalization
         # (std, mean, and principal components if ZCA whitening is applied)
-        train_datagen.fit(train_x)
+        datagen.fit(train_x)
 
         train_X = train_x
-        test_X = train_datagen.standardize(test_x)
+        test_X = datagen.standardize(test_x)
 
         # converting the input class labels to categorical labels for training
         train_Y = to_categorical(train_y, num_classes=self.num_classes)
         test_Y = to_categorical(test_y, num_classes=self.num_classes)
 
-        return train_X, train_Y, test_X, test_Y, train_datagen, test_datagen
+        return train_X, train_Y, test_X, test_Y, datagen
 
     def _load_from_path_grayscale(self, path, label):
         x = []
