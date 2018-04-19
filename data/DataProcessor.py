@@ -2,36 +2,67 @@ import os
 
 import cv2
 import numpy as np
+from keras.utils import to_categorical
+from keras.preprocessing.image import ImageDataGenerator
 
-IMAGE_SIZE = 64
-TRAIN_WALDO = '{}/train_waldo'.format(IMAGE_SIZE)
-TRAIN_NOTWALDO = '{}/train_notwaldo'.format(IMAGE_SIZE)
-TEST_WALDO = '{}/test_waldo'.format(IMAGE_SIZE)
-TEST_NOTWALDO = '{}/test_notwaldo'.format(IMAGE_SIZE)
+image_size = 64
+train_waldo = '{}/train_waldo'.format(image_size)
+train_notwaldo = '{}/train_notwaldo'.format(image_size)
+test_waldo = '{}/test_waldo'.format(image_size)
+test_notwaldo = '{}/test_notwaldo'.format(image_size)
 
 
 class DataProcessor(object):
 
     @staticmethod
-    def load_train_grayscale():
-        waldo_x, waldo_y = DataProcessor._load_from_path_grayscale(TRAIN_WALDO, 0)
-        notwaldo_x, notwaldo_y = DataProcessor._load_from_path_grayscale(TRAIN_NOTWALDO, 1)
-        return np.concatenate((waldo_x, notwaldo_x)), np.concatenate((waldo_y, notwaldo_y))
+    def load_grayscale():
+        train_waldo_x, train_waldo_y = DataProcessor._load_from_path_grayscale(train_waldo, 0)
+        train_notwaldo_x, train_notwaldo_y = DataProcessor._load_from_path_grayscale(train_notwaldo, 1)
+        test_waldo_x, test_waldo_y = DataProcessor._load_from_path_grayscale(test_waldo, 0)
+        test_notwaldo_x, test_notwaldo_y = DataProcessor._load_from_path_grayscale(test_notwaldo, 1)
+
+        train_x = np.concatenate((train_waldo_x, train_notwaldo_x))
+        train_y = np.concatenate((train_waldo_y, train_notwaldo_y))
+        test_x = np.concatenate((test_waldo_x, test_notwaldo_x))
+        test_y = np.concatenate((test_waldo_y, test_notwaldo_y))
+
+        return train_x, train_y, test_x, test_y
 
     @staticmethod
-    def load_test_grayscale():
-        waldo_x, waldo_y = DataProcessor._load_from_path_grayscale(TEST_WALDO, 0)
-        notwaldo_x, notwaldo_y = DataProcessor._load_from_path_grayscale(TEST_NOTWALDO, 1)
-        return np.concatenate((waldo_x, notwaldo_x)), np.concatenate((waldo_y, notwaldo_y))
+    def preprocess_data(train_x, train_y, test_x, test_y, num_classes):
+        # augment training dataset
+        train_datagen = ImageDataGenerator(
+            featurewise_center=True,
+            featurewise_std_normalization=True,
+            rotation_range=20,
+            width_shift_range=0.2,
+            height_shift_range=0.2,
+            horizontal_flip=True)
+
+        test_datagen = ImageDataGenerator()
+
+        # compute quantities required for featurewise normalization
+        # (std, mean, and principal components if ZCA whitening is applied)
+        train_datagen.fit(train_x)
+
+        test_X = train_datagen.standardize(test_x)
+
+        # converting the input class labels to categorical labels for training
+        train_Y = to_categorical(train_y, num_classes=num_classes)
+        test_Y = to_categorical(test_y, num_classes=num_classes)
+
+        return train_X, train_Y, test_X, test_Y
 
     @staticmethod
     def _load_from_path_grayscale(path, label):
         x = []
+        # load images from path
         for image in os.listdir(path):
             x.append(cv2.imread('{}/{}'.format(path, image), 0))
 
-        x = np.concatenate([image[np.newaxis, :] for image in x])
-        x = x[:, :, :, np.newaxis]
+        # bring them into the right format for use in the model
+        x = np.concatenate([image[np.newaxis, :] for image in x])  # concatenate the images along the first axis
+        x = x[:, :, :, np.newaxis]  # add a forth axis
 
         if label == 1:
             y = np.ones(x.shape[0])
