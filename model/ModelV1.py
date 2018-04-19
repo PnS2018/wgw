@@ -10,28 +10,27 @@ class ModelManager(object):
         x = Input((image_dim_0, image_dim_1, number_of_channels))
         c1 = Conv2D(filters=20,
                     kernel_size=(7, 7),
-                    padding="same",
-                    activation="relu")(x)
+                    padding='same',
+                    activation='relu')(x)
         p1 = MaxPooling2D((2, 2))(c1)
         c2 = Conv2D(filters=25,
                     kernel_size=(5, 5),
-                    padding="same",
-                    activation="relu")(p1)
+                    padding='same',
+                    activation='relu')(p1)
         p2 = MaxPooling2D((2, 2))(c2)
         f = Flatten()(p2)
-        d = Dense(200, activation="relu")(f)
-        y = Dense(10, activation="softmax")(d)
+        d = Dense(200, activation='relu')(f)
+        y = Dense(10, activation='softmax')(d)
         model = Model(x, y)
-
-        print("[MESSAGE] Model is defined.")
 
         # print model summary
         model.summary()
 
         # compile the model aganist the categorical cross entropy loss
-        # and use SGD optimizer, you can try to use different
-        # optimizers if you want
-        # see https://keras.io/losses/
-        model.compile(loss="categorical_crossentropy",
-                      optimizer="sgd",
-                      metrics=[categorical_crossentropy])
+        # loss:       cost function, should be cross validation, categorical_crossentropy also possible
+        # optimizer:  schedule learning rate troughout the training
+        # metric:    performance measure categroical_crossentropy, AUC for binaryclassf, or accuracy
+        model.compile(loss='binary_crossentropy',
+                      optimizer='sgd',
+                      metrics=['accuracy'])
+        return model
