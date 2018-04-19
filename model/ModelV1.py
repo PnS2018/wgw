@@ -1,5 +1,4 @@
 from keras.layers import Input, Dense, Conv2D, MaxPooling2D, Flatten
-from keras.losses import categorical_crossentropy
 from keras.models import Model
 
 
@@ -20,13 +19,13 @@ class ModelManager(object):
         p2 = MaxPooling2D((2, 2))(c2)
         f = Flatten()(p2)
         d = Dense(200, activation='relu')(f)
-        y = Dense(10, activation='softmax')(d)
+        y = Dense(2, activation='softmax')(d)
         model = Model(x, y)
 
         # print model summary
         model.summary()
 
-        # compile the model aganist the categorical cross entropy loss
+        # compile the model against the categorical cross entropy loss
         # loss:       cost function, should be cross validation, categorical_crossentropy also possible
         # optimizer:  schedule learning rate troughout the training
         # metric:    performance measure categroical_crossentropy, AUC for binaryclassf, or accuracy
