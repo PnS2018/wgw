@@ -45,13 +45,14 @@ class DataProcessor(object):
         # (std, mean, and principal components if ZCA whitening is applied)
         train_datagen.fit(train_x)
 
+        train_X = train_x
         test_X = train_datagen.standardize(test_x)
 
         # converting the input class labels to categorical labels for training
         train_Y = to_categorical(train_y, num_classes=num_classes)
         test_Y = to_categorical(test_y, num_classes=num_classes)
 
-        return train_X, train_Y, test_X, test_Y
+        return train_X, train_Y, test_X, test_Y, train_datagen, test_datagen
 
     @staticmethod
     def _load_from_path_grayscale(path, label):

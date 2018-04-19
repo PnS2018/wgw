@@ -13,7 +13,11 @@ train_x, train_y, test_x, test_y = DataProcessor.load_grayscale()
 
 print("[MESSAGE] Dataset is loaded.")
 
-train_X, train_Y, test_X, test_Y = DataProcessor.preprocess_data(train_x, train_y, test_x, test_y, NUM_CLASSES)
+train_X, train_Y, test_X, test_Y, train_datagen, test_datagen = DataProcessor.preprocess_data(train_x,
+                                                                                              train_y,
+                                                                                              test_x,
+                                                                                              test_y,
+                                                                                              NUM_CLASSES)
 
 print("[MESSAGE] Dataset is preprocessed")
 
@@ -21,7 +25,6 @@ model = ModelManager.get_model(train_X.shape[1], train_X.shape[2], train_X.shape
 
 print("[MESSAGE] Model is defined and compiled.")
 
-if mode == 'Train':
     # fits the model on batches with real-time data augmentation:
     model.fit_generator(datagen.flow(train_x, train_Y, batch_size=64),
                         steps_per_epoch=len(train_x) / 64, epochs=NUM_EPOCHS,
