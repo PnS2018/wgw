@@ -1,61 +1,30 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from keras.preprocessing.image import ImageDataGenerator
-from keras.utils import to_categorical
-
 from DataProcessor import DataProcessor
 from ModelV1 import ModelManager
 
-# load data
-train_x, train_y = DataProcessor.load_train_grayscale()
-test_x, test_y = DataProcessor.load_test_grayscale()
+# parameters
+NUM_CLASSES = 2
+NUM_EPOCHS = 10
 
-num_classes = 2
-num_epochs = 10
-mode = 'Test'
+# load data
+train_x, train_y, test_x, test_y = DataProcessor.load_grayscale()
 
 print("[MESSAGE] Dataset is loaded.")
 
-# preprocessing for training and testing images
-train_x = train_x.astype("float32") / 255.  # rescale image
-mean_train_x = np.mean(train_x, axis=0)  # compute the mean across pixels
-train_X = train_x - mean_train_x  # remove the mean pixel value from image
-test_x = test_x.astype("float32") / 255.
-test_X = test_x - mean_train_x
+train_X, train_Y, test_X, test_Y = DataProcessor.preprocess_data(train_x, train_y, test_x, test_y, NUM_CLASSES)
 
-print("[MESSAGE] Dataset is preprocessed.")
+print("[MESSAGE] Dataset is preprocessed")
 
-# converting the input class labels to categorical labels for training
-train_Y = to_categorical(train_y, num_classes=num_classes)
-test_Y = to_categorical(test_y, num_classes=num_classes)
-
-print("[MESSAGE] Converted labels to categorical labels.")
-
-model = ModelManager.get_model(train_x.shape[1], train_x.shape[2], train_x.shape[3])
+model = ModelManager.get_model(train_X.shape[1], train_X.shape[2], train_X.shape[3])
 
 print("[MESSAGE] Model is defined and compiled.")
-
-# augment training dataset
-datagen = ImageDataGenerator(
-    featurewise_center=True,
-    featurewise_std_normalization=True,
-    rotation_range=20,
-    width_shift_range=0.2,
-    height_shift_range=0.2,
-    horizontal_flip=True)
-
-# compute quantities required for featurewise normalization
-# (std, mean, and principal components if ZCA whitening is applied)
-datagen.fit(train_x)
-
-# augment testing dataset
-test_x = test_x / (datagen.std + datagen.zca_epsilon)
 
 if mode == 'Train':
     # fits the model on batches with real-time data augmentation:
     model.fit_generator(datagen.flow(train_x, train_Y, batch_size=64),
-                        steps_per_epoch=len(train_x) / 64, epochs=num_epochs,
+                        steps_per_epoch=len(train_x) / 64, epochs=NUM_EPOCHS,
                         callbacks=[])
 
     print("[MESSAGE] Model is trained.")
