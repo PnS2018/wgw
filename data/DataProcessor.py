@@ -5,21 +5,21 @@ import numpy as np
 from keras.utils import to_categorical
 from keras.preprocessing.image import ImageDataGenerator
 
-image_size = 64
-train_waldo = '{}/train_waldo'.format(image_size)
-train_notwaldo = '{}/train_notwaldo'.format(image_size)
-test_waldo = '{}/test_waldo'.format(image_size)
-test_notwaldo = '{}/test_notwaldo'.format(image_size)
 
+class DataProcessor:
+    def __init__(self, num_classes, image_size, train_waldo, train_notwaldo, test_waldo, test_notwaldo):
+        self.num_classes = num_classes
+        self.image_size = image_size
+        self.train_waldo = train_waldo
+        self.train_notwaldo = train_notwaldo
+        self.test_waldo = test_waldo
+        self.test_notwaldo = test_notwaldo
 
-class DataProcessor(object):
-
-    @staticmethod
-    def load_grayscale():
-        train_waldo_x, train_waldo_y = DataProcessor._load_from_path_grayscale(train_waldo, 0)
-        train_notwaldo_x, train_notwaldo_y = DataProcessor._load_from_path_grayscale(train_notwaldo, 1)
-        test_waldo_x, test_waldo_y = DataProcessor._load_from_path_grayscale(test_waldo, 0)
-        test_notwaldo_x, test_notwaldo_y = DataProcessor._load_from_path_grayscale(test_notwaldo, 1)
+    def load_grayscale(self):
+        train_waldo_x, train_waldo_y = self._load_from_path_grayscale(self.train_waldo, 0)
+        train_notwaldo_x, train_notwaldo_y = self._load_from_path_grayscale(self.train_notwaldo, 1)
+        test_waldo_x, test_waldo_y = self._load_from_path_grayscale(self.test_waldo, 0)
+        test_notwaldo_x, test_notwaldo_y = self._load_from_path_grayscale(self.test_notwaldo, 1)
 
         train_x = np.concatenate((train_waldo_x, train_notwaldo_x))
         train_y = np.concatenate((train_waldo_y, train_notwaldo_y))
@@ -28,8 +28,7 @@ class DataProcessor(object):
 
         return train_x, train_y, test_x, test_y
 
-    @staticmethod
-    def preprocess_data(train_x, train_y, test_x, test_y, num_classes):
+    def preprocess_data(self, train_x, train_y, test_x, test_y):
         # augment training dataset
         train_datagen = ImageDataGenerator(
             featurewise_center=True,
@@ -49,13 +48,12 @@ class DataProcessor(object):
         test_X = train_datagen.standardize(test_x)
 
         # converting the input class labels to categorical labels for training
-        train_Y = to_categorical(train_y, num_classes=num_classes)
-        test_Y = to_categorical(test_y, num_classes=num_classes)
+        train_Y = to_categorical(train_y, num_classes=self.num_classes)
+        test_Y = to_categorical(test_y, num_classes=self.num_classes)
 
         return train_X, train_Y, test_X, test_Y, train_datagen, test_datagen
 
-    @staticmethod
-    def _load_from_path_grayscale(path, label):
+    def _load_from_path_grayscale(self, path, label):
         x = []
         # load images from path
         for image in os.listdir(path):
