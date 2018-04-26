@@ -1,10 +1,10 @@
 from DataProcessor import DataProcessor
-from ModelV1 import ModelManager
+from ModelV3 import ModelManager
 
 # parameters
-version = 1
+version = 6
 num_classes = 2
-num_epochs = 10
+num_epochs = 20
 image_size = 64
 num_channels = 1
 train_waldo = 'data/{}/train_waldo'.format(image_size)
@@ -32,7 +32,8 @@ model.fit_generator(datagen.flow(train_x, train_Y, batch_size=64),
                     steps_per_epoch=len(train_x) / 64,
                     epochs=num_epochs,
                     callbacks=[],
-                    validation_data=(test_X, test_Y))
+                    validation_data=(test_X, test_Y),
+                    class_weight={0: 0.9, 1: 0.1})
 
 print("[MESSAGE] Model is trained.")
 
