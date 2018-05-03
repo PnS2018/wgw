@@ -8,7 +8,7 @@ class ModelManager(object):
 
     @staticmethod
     def get_model():
-        x = Input((config.IMAGE_SIZE, config.IMAGE_SIZE, config.NUMBER_OF_CHANNELS))
+        x = Input((config.IMAGE_SIZE, config.IMAGE_SIZE, config.NUM_CHANNELS))
         c1 = Conv2D(filters=20,
                     kernel_size=(7, 7),
                     padding='same',

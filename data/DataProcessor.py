@@ -57,7 +57,8 @@ class DataProcessor:
         return train_X, train_Y, test_X, test_Y, datagen
 
     def augement_and_save(self):
-        train_waldo_x, _ = self._load_from_path_grayscale(self.train_waldo, 0)  #create picture in right format for keras to proceed
+        train_waldo_x, _ = self._load_from_path_grayscale(self.train_waldo,
+                                                          0)  # create picture in right format for keras to proceed
 
         datagen = ImageDataGenerator(
             rotation_range=40,
@@ -69,10 +70,11 @@ class DataProcessor:
             fill_mode='nearest')
 
         i = 0
-        for j in datagen.flow(train_waldo_x, batch_size= 1, save_to_dir='64/augmented_train_waldo', save_prefix='augmented', save_format='jpeg'):
-                i += 1
-                if i > 10:
-                    break # otherwise the generator would loop indefinitely
+        for j in datagen.flow(train_waldo_x, batch_size=1, save_to_dir='augmented_train_waldo',
+                              save_prefix='augmented', save_format='jpeg'):
+            i += 1
+            if i > 10:
+                break  # otherwise the generator would loop indefinitely
 
     def _load_from_path_grayscale(self, path, label):
         x = []
