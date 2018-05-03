@@ -3,7 +3,7 @@ import os
 import cv2
 import numpy as np
 from keras.utils import to_categorical
-from keras.preprocessing.image import ImageDataGenerator
+from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 
 from config import config
 
@@ -16,6 +16,7 @@ class DataProcessor:
         self.train_notwaldo = config.TRAIN_NOTWALDO
         self.test_waldo = config.TEST_WALDO
         self.test_notwaldo = config.TEST_NOTWALDO
+        self.augmented_train_waldo = config.AUGMENTED_TRAIN_WALDO
 
     def load_grayscale(self):
         train_waldo_x, train_waldo_y = self._load_from_path_grayscale(self.train_waldo, 0)
@@ -57,27 +58,29 @@ class DataProcessor:
         return train_X, train_Y, test_X, test_Y, datagen
 
     def augment_and_save(self):
-        train_waldo_x, _ = self._load_from_path_grayscale(self.train_waldo,
-                                                          0)  # create picture in right format for keras to proceed
+        for image in os.listdir(self.train_waldo):
+            img = load_img('{}/{}'.format(self.train_waldo, image))  # this is a PIL image
+            x = img_to_array(img)  # this is a Numpy array with shape (3, 150, 150)
+            x = x.reshape((1,) + x.shape)  # this is a Numpy array with shape (1, 3, 150, 150)
 
-        datagen = ImageDataGenerator(
-            rotation_range=40,
-            width_shift_range=0.2,
-            height_shift_range=0.2,
-            #zca_whitening=True, #changes structure and outline of pictures
-            zoom_range=0.2,
-            horizontal_flip=True,
-            fill_mode='nearest')
+            datagen = ImageDataGenerator(
+                rotation_range=40,
+                width_shift_range=0.2,
+                height_shift_range=0.2,
+                #zca_whitening=True, #changes structure and outline of pictures
+                zoom_range=0.2,
+                horizontal_flip=True,
+                fill_mode='nearest')
 
-        i = 0
-        for j in datagen.flow(train_waldo_x,
-                              batch_size=1,
-                              save_to_dir='{}/data/64/augmented_train_waldo'.format(os.getcwd()),
-                              save_prefix='augmented',
-                              save_format='jpeg'):
-            i += 1
-            if i > 10:
-                break  # otherwise the generator would loop indefinitely
+            i = 0
+            for _ in datagen.flow(x,
+                                  batch_size=1,
+                                  save_to_dir=self.augmented_train_waldo,
+                                  save_prefix='augmented',
+                                  save_format='jpeg'):
+                i += 1
+                if i > 3:
+                    break  # otherwise the generator would loop indefinitely
 
     def _load_from_path_grayscale(self, path, label):
         x = []
