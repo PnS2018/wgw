@@ -64,11 +64,10 @@ class DataProcessor:
             x = x.reshape((1,) + x.shape)  # this is a Numpy array with shape (1, 3, 150, 150)
 
             datagen = ImageDataGenerator(
-                rotation_range=40,
+                rotation_range=20,
                 width_shift_range=0.2,
                 height_shift_range=0.2,
-                #zca_whitening=True, #changes structure and outline of pictures
-                zoom_range=0.2,
+                # zca_whitening=True, #changes structure and outline of pictures
                 horizontal_flip=True,
                 fill_mode='nearest')
 
