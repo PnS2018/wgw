@@ -1,7 +1,8 @@
+import os
 import yaml
 from dotmap import DotMap
 
-CONFIG_FILE = '../config.yml'
+CONFIG_FILE = '{}/config.yml'.format(os.getcwd())
 
 
 def get_config():

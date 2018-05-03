@@ -3,6 +3,7 @@ from keras.losses import categorical_crossentropy
 from keras.models import Model
 import keras.backend as K
 
+from config import config
 
 
 def recall(y_true, y_pred):
@@ -47,8 +48,8 @@ class ModelManager(object):
 
 
     @staticmethod
-    def get_model(image_dim_0, image_dim_1, number_of_channels):
-        x = Input((image_dim_0, image_dim_1, number_of_channels))
+    def get_model():
+        x = Input((config.IMAGE_SIZE, config.IMAGE_SIZE, config.NUM_CHANNELS))
         c1 = Conv2D(filters=20,
                     kernel_size=(7, 7),
                     padding='same',
@@ -60,7 +61,7 @@ class ModelManager(object):
                     activation='relu')(p1)
         p2 = MaxPooling2D((2, 2))(c2)
         f = Flatten()(p2)
-        d = Dense(200, activation='relu')(f)
+        d = Dense(20, activation='relu')(f)
         y = Dense(2, activation='softmax')(d)
         model = Model(x, y)
 
