@@ -67,10 +67,11 @@ class DataProcessor:
                 rotation_range=40,
                 width_shift_range=0.2,
                 height_shift_range=0.2,
-                #zca_whitening=True, #changes structure and outline of pictures
                 zoom_range=0.2,
                 horizontal_flip=True,
-                fill_mode='nearest')
+                fill_mode='nearest'
+                # zca_whitening=True, #changes structure and outline of pictures
+            )
 
             i = 0
             for _ in datagen.flow(x,
