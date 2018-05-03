@@ -1,0 +1,14 @@
+next time:
+
+when model prototype runs:
+-check run time on raspberry pi
+
+to make the prototype work:
+-try to optimize the image processing (eg: enhance edges, details, colours,etc.)
+-decrease the number of dense / no of parameters (vers 3)
+-optimize kernel size
+-carefull with overfitting
+
+--augment the pictures/data
+
+
