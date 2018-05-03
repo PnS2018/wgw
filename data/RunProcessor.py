@@ -1,9 +1,10 @@
 import cv2
 
+from config import config
 
 class RunProcessor:
-    def __init__(self, image_size):
-        self.image_size = image_size
+    def __init__(self):
+        self.image_size = config.IMAGE_SIZE
 
     def get_image_tiles(self, path, stride):
         img = cv2.imread(path, 0)  # 0 for grayscale

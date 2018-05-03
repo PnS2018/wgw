@@ -5,15 +5,17 @@ import numpy as np
 from keras.utils import to_categorical
 from keras.preprocessing.image import ImageDataGenerator
 
+from config import config
+
 
 class DataProcessor:
-    def __init__(self, num_classes, image_size, train_waldo, train_notwaldo, test_waldo, test_notwaldo):
-        self.num_classes = num_classes
-        self.image_size = image_size
-        self.train_waldo = train_waldo
-        self.train_notwaldo = train_notwaldo
-        self.test_waldo = test_waldo
-        self.test_notwaldo = test_notwaldo
+    def __init__(self):
+        self.num_classes = config.NUM_CLASSES
+        self.image_size = config.IMAGE_SIZE
+        self.train_waldo = config.TRAIN_WALDO
+        self.train_notwaldo = config.TRAIN_NOTWALDO
+        self.test_waldo = config.TEST_WALDO
+        self.test_notwaldo = config.TEST_NOTWALDO
 
     def load_grayscale(self):
         train_waldo_x, train_waldo_y = self._load_from_path_grayscale(self.train_waldo, 0)
