@@ -1,12 +1,14 @@
 from keras.layers import Input, Dense, Conv2D, MaxPooling2D, Flatten
 from keras.models import Model
 
+from config import config
+
 
 class ModelManager(object):
 
     @staticmethod
-    def get_model(image_dim_0, image_dim_1, number_of_channels):
-        x = Input((image_dim_0, image_dim_1, number_of_channels))
+    def get_model():
+        x = Input((config.IMAGE_SIZE, config.IMAGE_SIZE, config.NUMBER_OF_CHANNELS))
         c1 = Conv2D(filters=20,
                     kernel_size=(7, 7),
                     padding='same',
