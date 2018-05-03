@@ -2,46 +2,9 @@ from keras.layers import Input, Dense, Conv2D, MaxPooling2D, Flatten
 from keras.losses import categorical_crossentropy
 from keras.models import Model
 import keras.backend as K
+import f1 as f1
 
 from config import config
-
-
-def recall(y_true, y_pred):
-    """Recall metric.
-
-    Only computes a batch-wise average of recall.
-
-    Computes the recall, a metric for multi-label classification of
-    how many relevant items are selected.
-    """
-    y_true = K.cast(K.argmax(y_true, axis=1), 'float32')
-    y_pred = K.cast(K.argmax(y_pred, axis=1), 'float32')
-    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-    possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
-    recall = true_positives / (possible_positives + K.epsilon())
-    return recall
-
-
-def precision(y_true, y_pred):
-    """Precision metric.
-
-    Only computes a batch-wise average of precision.
-
-    Computes the precision, a metric for multi-label classification of
-    how many selected items are relevant.
-    """
-    y_true = K.cast(K.argmax(y_true, axis=1), 'float32')
-    y_pred = K.cast(K.argmax(y_pred, axis=1), 'float32')
-    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-    predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
-    precision = true_positives / (predicted_positives + K.epsilon())
-    return precision
-
-
-def f1(y_true, y_pred):
-    prec = precision(y_true, y_pred)
-    rec = recall(y_true, y_pred)
-    return 2*((prec*rec)/(prec+rec+K.epsilon()))
 
 
 class ModelManager(object):
@@ -72,7 +35,7 @@ class ModelManager(object):
         # loss:       cost function, should be cross validation, categorical_crossentropy also possible
         # optimizer:  schedule learning rate troughout the training
         # metric:    performance measure categroical_crossentropy, AUC for binaryclassf, or accuracy
-        model.compile(loss=categorical_crossentropy,
+        model.compile(loss= test, # categorical_crossentropy
                       optimizer='sgd',
-                      metrics=['accuracy', f1, precision, recall])
+                      metrics=['accuracy', f1.f1, f1.precision, f1.recall])
         return model
