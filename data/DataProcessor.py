@@ -70,8 +70,11 @@ class DataProcessor:
             fill_mode='nearest')
 
         i = 0
-        for j in datagen.flow(train_waldo_x, batch_size=1, save_to_dir='augmented_train_waldo',
-                              save_prefix='augmented', save_format='jpeg'):
+        for j in datagen.flow(train_waldo_x,
+                              batch_size=1,
+                              save_to_dir='{}/data/64/augmented_train_waldo'.format(os.getcwd()),
+                              save_prefix='augmented',
+                              save_format='jpeg'):
             i += 1
             if i > 10:
                 break  # otherwise the generator would loop indefinitely
