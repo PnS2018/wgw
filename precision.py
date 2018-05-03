@@ -3,22 +3,15 @@ from keras.models import load_model
 
 from DataProcessor import DataProcessor
 
-# parameters
-version = 6
-num_classes = 2
-image_size = 64
-train_waldo = 'data/{}/train_waldo'.format(image_size)
-train_notwaldo = 'data/{}/train_notwaldo'.format(image_size)
-test_waldo = 'data/{}/test_waldo'.format(image_size)
-test_notwaldo = 'data/{}/test_notwaldo'.format(image_size)
+from config import config
 
-dp = DataProcessor(num_classes, image_size, train_waldo, train_notwaldo, test_waldo, test_notwaldo)
+dp = DataProcessor()
 
 # load & preprocess data
 train_x, train_y, test_x, test_y = dp.load_grayscale()
 train_X, train_Y, test_X, test_Y, datagen = dp.preprocess_data(train_x, train_y, test_x, test_y)
 
-model = load_model('version_{}.h5'.format(version))
+model = load_model('version{}_epochs{}.h5'.format(config.VERSION, config.NUM_EPOCHS))
 
 preds_org = model.predict(test_x)
 preds = np.round(preds_org)

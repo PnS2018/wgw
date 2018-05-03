@@ -11,11 +11,13 @@ class ModelManager(object):
         x = Input((config.IMAGE_SIZE, config.IMAGE_SIZE, config.NUM_CHANNELS))
         c1 = Conv2D(filters=20,
                     kernel_size=(7, 7),
+                    strides=(2, 2),
                     padding='same',
                     activation='relu')(x)
         p1 = MaxPooling2D((2, 2))(c1)
         c2 = Conv2D(filters=25,
-                    kernel_size=(5, 5),
+                    kernel_size=(7, 7),
+                    strides=(2, 2),
                     padding='same',
                     activation='relu')(p1)
         p2 = MaxPooling2D((2, 2))(c2)
@@ -32,6 +34,6 @@ class ModelManager(object):
         # optimizer:  schedule learning rate troughout the training
         # metric:    performance measure categroical_crossentropy, AUC for binaryclassf, or accuracy
         model.compile(loss='binary_crossentropy',
-                      optimizer='sgd',
+                      optimizer='adam',
                       metrics=['accuracy'])
         return model

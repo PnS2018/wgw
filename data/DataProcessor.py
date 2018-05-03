@@ -39,9 +39,9 @@ class DataProcessor:
         datagen = ImageDataGenerator(
             featurewise_center=True,
             featurewise_std_normalization=True,
-            rotation_range=20,
-            width_shift_range=0.2,
-            height_shift_range=0.2,
+            rotation_range=2,
+            width_shift_range=0.05,
+            height_shift_range=0.05,
             horizontal_flip=True)
 
         # compute quantities required for featurewise normalization

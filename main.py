@@ -19,15 +19,13 @@ print("[MESSAGE] Model is defined and compiled.")
 
 # fits the model on batches with real-time data augmentation:
 model.fit_generator(datagen.flow(train_x, train_Y, batch_size=64),
-                    steps_per_epoch=len(train_x) / 64,
                     epochs=config.NUM_EPOCHS,
                     callbacks=[],
-                    validation_data=(test_X, test_Y),
-                    class_weight={0: 0.9, 1: 0.1})
+                    validation_data=(test_X, test_Y))
 
 print("[MESSAGE] Model is trained.")
 
 # save the trained model
-model.save("version{}_epochs{}.h5".format(config.VERSION))
+model.save("version{}_epochs{}.h5".format(config.VERSION, config.NUM_EPOCHS))
 
 print("[MESSAGE] Model is saved.")
