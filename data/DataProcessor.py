@@ -56,7 +56,7 @@ class DataProcessor:
 
         return train_X, train_Y, test_X, test_Y, datagen
 
-    def augement_and_save(self):
+    def augment_and_save(self):
         train_waldo_x, _ = self._load_from_path_grayscale(self.train_waldo,
                                                           0)  # create picture in right format for keras to proceed
 
@@ -64,7 +64,7 @@ class DataProcessor:
             rotation_range=40,
             width_shift_range=0.2,
             height_shift_range=0.2,
-            shear_range=0.2,
+            #zca_whitening=True, #changes structure and outline of pictures
             zoom_range=0.2,
             horizontal_flip=True,
             fill_mode='nearest')
