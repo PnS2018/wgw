@@ -2,7 +2,12 @@ import cv2
 
 from config import config
 
+
 class RunProcessor:
+    """
+    Wrapper for functions that are for using the already trained network
+    """
+
     def __init__(self):
         self.image_size = config.IMAGE_SIZE
 

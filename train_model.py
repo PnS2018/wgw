@@ -1,6 +1,6 @@
 from config import config
 from DataProcessor import DataProcessor
-from ModelV3 import ModelManager
+from ModelManager import ModelManager
 
 dp = DataProcessor()
 
@@ -13,7 +13,7 @@ train_X, train_Y, test_X, test_Y, datagen = dp.preprocess_data(train_x, train_y,
 
 print("[MESSAGE] Dataset is preprocessed")
 
-model = ModelManager.get_model()
+model = ModelManager().get_model_v3()
 
 print("[MESSAGE] Model is defined and compiled.")
 

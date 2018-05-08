@@ -1,9 +1,8 @@
 import numpy as np
 from keras.models import load_model
 
-from DataProcessor import DataProcessor
-
 from config import config
+from DataProcessor import DataProcessor
 
 dp = DataProcessor()
 
@@ -30,7 +29,5 @@ for i in range(0, len(preds)):
         if test_Y[i][0] == 1:
             false_neg += 1
 
-for i in range(0, 5):
-    print(preds_org[i])
 print('Total positives: {}, Total negatives: {}, False negatives: {}, False positives: {}'.format(total_pos, total_neg,
                                                                                                   false_neg, false_pos))
