@@ -2,7 +2,7 @@ import keras.backend as K
 from keras.layers import Input, Dense, Conv2D, MaxPooling2D, Flatten
 from keras.models import Model
 
-from config import config
+from utils.config import config
 
 
 class ModelManager:

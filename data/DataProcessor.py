@@ -5,7 +5,7 @@ import numpy as np
 from keras.utils import to_categorical
 from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 
-from config import config
+from utils.config import config
 
 
 class DataProcessor:

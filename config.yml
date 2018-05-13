@@ -8,3 +8,5 @@ TRAIN_NOTWALDO: data/64/train_notwaldo
 TEST_WALDO: data/64/test_waldo
 TEST_NOTWALDO: data/64/test_notwaldo
 AUGMENTED_TRAIN_WALDO: data/64/augmented_train_waldo
+STRIDE: 32
+RUN_IMAGE_PATH: data/original-images/1.jpg

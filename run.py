@@ -1,19 +1,9 @@
-from RunProcessor import RunProcessor
-from ModelManager import ModelManager
+from keras.models import load_model
 
-imgPath='data/original-images/1.jpg'
-weightsPath = ''
-stride= 32
+from data.RunProcessor import RunProcessor
+from utils.config import config
 
+run_processor = RunProcessor()
+model = load_model('version{}_epochs{}.h5'.format(config.VERSION, config.NUM_EPOCHS))
 
-rp = RunProcessor()
-mm = ModelManager()
-model = mm.get_model_v3()
-model.load_weights(weightsPath)
-
-rp.findWaldo(imgPath, stride, model)
-
-
-
-
-# TODO
+run_processor.find_waldo(config.RUN_IMAGE_PATH, config.STRIDE, model)

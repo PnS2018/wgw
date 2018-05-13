@@ -1,4 +1,4 @@
-from DataProcessor import DataProcessor
+from data.DataProcessor import DataProcessor
 
 dp = DataProcessor()
 
