@@ -17,7 +17,7 @@ train_X, train_Y, test_X, test_Y, datagen = dp.preprocess_data(train_x, train_y,
 
 print("[MESSAGE] Dataset is preprocessed")
 
-model = ModelManager().get_model_v3()
+model = ModelManager().get_model_v4()
 
 print("[MESSAGE] Model is defined and compiled.")
 
@@ -30,6 +30,6 @@ model.fit_generator(datagen.flow(train_x, train_Y, batch_size=64),
 print("[MESSAGE] Model is trained.")
 
 # save the trained model
-model.save("version{}_epochs{}.h5".format(config.VERSION, config.NUM_EPOCHS))
+model.save("version{}_epochs{}_modelv4.h5".format(config.VERSION, config.NUM_EPOCHS))
 
 print("[MESSAGE] Model is saved.")
