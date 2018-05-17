@@ -122,21 +122,20 @@ class ModelManager:
         :return: model instance
         """
         x = Input((self.image_x_axis, self.image_y_axis, self.num_channels))
-        c1 = Conv2D(filters=20,
-                    kernel_size=(7, 7),
-                    strides=(2, 2),
+        c1 = Conv2D(filters=30,
+                    kernel_size=(5, 5),
+                    strides=(1, 1),
                     padding='same',
                     activation='relu')(x)
         p1 = MaxPooling2D((2, 2))(c1)
-        c2 = Conv2D(filters=35,
-                    kernel_size=(5, 5),
+        c2 = Conv2D(filters=25,
+                    kernel_size=(7, 7),
                     strides=(2, 2),
                     padding='same',
                     activation='relu')(p1)
         p2 = MaxPooling2D((2, 2))(c2)
         f = Flatten()(p2)
-        d = Dropout(0.1)(f)
-        d = Dense(25, activation='relu')(d)
+        d = Dense(20, activation='relu')(f)
         y = Dense(2, activation='softmax')(d)
         model = Model(x, y)
 
@@ -150,7 +149,6 @@ class ModelManager:
         model.compile(loss='binary_crossentropy',
                       optimizer='adam',
                       metrics=['accuracy'])
-
         return model
 
 
