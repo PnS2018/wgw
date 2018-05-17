@@ -1,6 +1,6 @@
-from config import config
-from DataProcessor import DataProcessor
-from ModelManager import ModelManager
+from data.DataProcessor import DataProcessor
+from model.ModelManager import ModelManager
+from utils.config import config
 
 dp = DataProcessor()
 

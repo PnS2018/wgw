@@ -1,8 +1,8 @@
 import numpy as np
 from keras.models import load_model
 
-from config import config
-from DataProcessor import DataProcessor
+from data.DataProcessor import DataProcessor
+from utils.config import config
 
 dp = DataProcessor()
 
