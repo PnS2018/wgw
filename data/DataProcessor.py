@@ -53,10 +53,11 @@ class DataProcessor:
         datagen = ImageDataGenerator(
             featurewise_center=True,
             featurewise_std_normalization=True,
-            rotation_range=2,
-            width_shift_range=0.05,
-            height_shift_range=0.05,
-            horizontal_flip=True)
+            rotation_range=5,
+            width_shift_range=0.1,
+            height_shift_range=0.1,
+            horizontal_flip=True,
+            fill_mode='nearest')
 
         datagen.fit(train_x)
 
@@ -83,10 +84,8 @@ class DataProcessor:
                 rotation_range=20,
                 width_shift_range=0.2,
                 height_shift_range=0.2,
-                # zca_whitening=True, # changes structure and outline of pictures
                 horizontal_flip=True,
                 fill_mode='nearest'
-                # zca_whitening=True, #changes structure and outline of pictures
             )
 
             i = 0

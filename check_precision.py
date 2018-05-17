@@ -8,12 +8,12 @@ dp = DataProcessor()
 
 # load & preprocess data
 train_x, train_y, test_x, test_y = dp.load_grayscale()
-train_X, train_Y, test_X, test_Y, datagen = dp.preprocess_data(train_x, train_y, test_x, test_y)
+_, _, test_X, test_Y, datagen = dp.preprocess_data(train_x, train_y, test_x, test_y)
 
 model = load_model('version{}_epochs{}.h5'.format(config.VERSION, config.NUM_EPOCHS))
 
-preds_org = model.predict(test_x)
-preds = np.round(preds_org)
+preds_org = model.predict(test_X)
+preds = np.round(preds_org - config.THRESHOLD + 0.5)
 false_pos = 0
 false_neg = 0
 total_pos = 0

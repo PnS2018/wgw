@@ -1,4 +1,4 @@
-VERSION: 1
+VERSION: 4
 NUM_CLASSES: 2
 NUM_EPOCHS: 75
 IMAGE_SIZE: 64
@@ -8,5 +8,9 @@ TRAIN_NOTWALDO: data/64/train_notwaldo
 TEST_WALDO: data/64/test_waldo
 TEST_NOTWALDO: data/64/test_notwaldo
 AUGMENTED_TRAIN_WALDO: data/64/augmented_train_waldo
-STRIDE: 32
-RUN_IMAGE_PATH: data/original-images/5.jpg
+STRIDE: 16
+RUN_IMAGE_PATH: data/original-images/8.jpg
+THRESHOLD: 0.70
+TOP_X: 10
+MEAN: 142.62315
+STD: 70.43289

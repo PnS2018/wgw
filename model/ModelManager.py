@@ -1,5 +1,5 @@
 import keras.backend as K
-from keras.layers import Input, Dense, Conv2D, MaxPooling2D, Flatten
+from keras.layers import Input, Dense, Conv2D, MaxPooling2D, Flatten, Dropout
 from keras.models import Model
 
 from utils.config import config
@@ -114,6 +114,43 @@ class ModelManager:
         model.compile(loss='binary_crossentropy',
                       optimizer='adam',
                       metrics=['accuracy'])
+        return model
+
+    def get_model_v4(self):
+        """
+        A bit more refined model
+        :return: model instance
+        """
+        x = Input((self.image_x_axis, self.image_y_axis, self.num_channels))
+        c1 = Conv2D(filters=20,
+                    kernel_size=(7, 7),
+                    strides=(2, 2),
+                    padding='same',
+                    activation='relu')(x)
+        p1 = MaxPooling2D((2, 2))(c1)
+        c2 = Conv2D(filters=35,
+                    kernel_size=(5, 5),
+                    strides=(2, 2),
+                    padding='same',
+                    activation='relu')(p1)
+        p2 = MaxPooling2D((2, 2))(c2)
+        f = Flatten()(p2)
+        d = Dropout(0.1)(f)
+        d = Dense(25, activation='relu')(d)
+        y = Dense(2, activation='softmax')(d)
+        model = Model(x, y)
+
+        # print model summary
+        model.summary()
+
+        # compile the model against the categorical cross entropy loss
+        # loss:       cost function, should be cross validation, categorical_crossentropy also possible
+        # optimizer:  schedule learning rate troughout the training
+        # metric:     performance measure categroical_crossentropy, AUC for binaryclassf, or accuracy
+        model.compile(loss='binary_crossentropy',
+                      optimizer='adam',
+                      metrics=['accuracy'])
+
         return model
 
 

@@ -1,6 +1,10 @@
+import numpy as np
+from utils.config import config
+
+np.random.seed(config.VERSION)
+
 from data.DataProcessor import DataProcessor
 from model.ModelManager import ModelManager
-from utils.config import config
 
 dp = DataProcessor()
 
