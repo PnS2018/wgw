@@ -1,12 +1,19 @@
-from keras.models import load_model
-
 from RunProcessor import RunProcessor
+from ModelManager import ModelManager
 
-version = 1
-image_size = 64
+imgPath='data/original-images/1.jpg'
+weightsPath = ''
+stride= 32
 
-rp = RunProcessor(image_size)
 
-blocks = rp.get_image_tiles('data/original-images/1.jpg', 64)
+rp = RunProcessor()
+mm = ModelManager()
+model = mm.get_model_v3()
+model.load_weights(weightsPath)
 
-model = load_model('version_{}.h5'.format(version))
+rp.findWaldo(imgPath, stride, model)
+
+
+
+
+# TODO

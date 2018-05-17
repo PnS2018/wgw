@@ -9,6 +9,10 @@ from config import config
 
 
 class DataProcessor:
+    """
+    Wrapper used for all data manipulation actions
+    """
+
     def __init__(self):
         self.num_classes = config.NUM_CLASSES
         self.image_size = config.IMAGE_SIZE
@@ -19,6 +23,12 @@ class DataProcessor:
         self.augmented_train_waldo = config.AUGMENTED_TRAIN_WALDO
 
     def load_grayscale(self):
+        """
+        Load the train and test images as grayscale vectors from the data directory
+        :return: numpy arrays of the respective train and test images
+        """
+
+        # a truth value of 0 corresponds to waldo and 1 to notwaldo
         train_waldo_x, train_waldo_y = self._load_from_path_grayscale(self.train_waldo, 0)
         train_notwaldo_x, train_notwaldo_y = self._load_from_path_grayscale(self.train_notwaldo, 1)
         test_waldo_x, test_waldo_y = self._load_from_path_grayscale(self.test_waldo, 0)
@@ -35,19 +45,22 @@ class DataProcessor:
         return train_x, train_y, test_x, test_y
 
     def preprocess_data(self, train_x, train_y, test_x, test_y):
+        """
+        Preprocess and augment the data to be used in the model
+        :return: numpy arrays with the augmented train and test vectors
+        """
         # augment training dataset
         datagen = ImageDataGenerator(
             featurewise_center=True,
             featurewise_std_normalization=True,
-            rotation_range=20,
-            width_shift_range=0.2,
-            height_shift_range=0.2,
+            rotation_range=2,
+            width_shift_range=0.05,
+            height_shift_range=0.05,
             horizontal_flip=True)
 
-        # compute quantities required for featurewise normalization
-        # (std, mean, and principal components if ZCA whitening is applied)
         datagen.fit(train_x)
 
+        # leave training data set as it is and standardize the test vector set
         train_X = train_x
         test_X = datagen.standardize(test_x)
 
@@ -58,16 +71,19 @@ class DataProcessor:
         return train_X, train_Y, test_X, test_Y, datagen
 
     def augment_and_save(self):
+        """
+        An augmentation function to generate augmented RGB pictures that saves them back to disk
+        """
         for image in os.listdir(self.train_waldo):
             img = load_img('{}/{}'.format(self.train_waldo, image))  # this is a PIL image
             x = img_to_array(img)  # this is a Numpy array with shape (3, 150, 150)
             x = x.reshape((1,) + x.shape)  # this is a Numpy array with shape (1, 3, 150, 150)
 
             datagen = ImageDataGenerator(
-                rotation_range=40,
+                rotation_range=20,
                 width_shift_range=0.2,
                 height_shift_range=0.2,
-                zoom_range=0.2,
+                # zca_whitening=True, # changes structure and outline of pictures
                 horizontal_flip=True,
                 fill_mode='nearest'
                 # zca_whitening=True, #changes structure and outline of pictures
@@ -81,7 +97,7 @@ class DataProcessor:
                                   save_format='jpeg'):
                 i += 1
                 if i > 3:
-                    break  # otherwise the generator would loop indefinitely
+                    break
 
     def _load_from_path_grayscale(self, path, label):
         x = []
