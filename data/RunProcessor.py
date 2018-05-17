@@ -16,21 +16,21 @@ class RunProcessor:
         img = cv2.imread(path, 0)  # 0 for grayscale
 
         # amount of pixels added to the bottom so its divideable through size
-        bottom = self.image_size - (img.shape[0] % self.image_size)
+        bottom = self.image_size - (img.shape[0] % self.image_size) % self.image_size
         # amount of pixels added to the right so its divideable through size
-        right = self.image_size - (img.shape[1] % self.image_size)
+        right = self.image_size - (img.shape[1] % self.image_size) % self.image_size
 
         return cv2.copyMakeBorder(img, 0, bottom, 0, right, cv2.BORDER_CONSTANT, value=0)
 
     def get_image_tiles(self, wrap, stride):
         # calculate the amount of rows by dividing by stride
-        rows = (wrap.shape[0] - self.image_size) // stride
+        rows = ((wrap.shape[0] - self.image_size) // stride) + 1
         # calculate the amount of cols by dividing by stride (eg. 10 tiles possible cols=9 )
-        cols = (wrap.shape[1] - self.image_size) // stride
+        cols = ((wrap.shape[1] - self.image_size) // stride) + 1
 
         img_tiles = []
-        for row in range(0, rows+1):
-            for col in range(0, cols+1):
+        for row in range(0, rows):
+            for col in range(0, cols):
                 y1 = row * stride
                 y2 = y1 + self.image_size
                 x1 = col * stride
@@ -45,14 +45,13 @@ class RunProcessor:
 
     def find_waldo(self, path, stride, model):
         img = self.get_wrapped_image(path)
-        x = self.get_image_tiles(img, stride)
+        x_org = self.get_image_tiles(img, stride)
 
         # bring them into the right format for use in the model
-        x = np.concatenate([image[np.newaxis, :] for image in x])  # concatenate the images along the first axis
+        x = np.concatenate([image[np.newaxis, :] for image in x_org])  # concatenate the images along the first axis
         x = x[:, :, :, np.newaxis]  # add a forth axis
 
-        rows = (img.shape[0] - self.image_size) // stride
-        cols = (img.shape[1] - self.image_size) // stride
+        cols = ((img.shape[1] - self.image_size) // stride) + 1
         found = 0
         preds_org = model.predict(x)
         preds = np.round(preds_org)
@@ -60,8 +59,8 @@ class RunProcessor:
         for i in range(0, len(preds)):
             if preds[i][0]:  # ...and get the one, that are labeled true
                 found += 1
-                row = i // cols - 1
-                col = i - row * (cols + 1)
+                row = i // cols
+                col = i - row * cols
                 y1 = row * stride
                 y2 = y1 + self.image_size
                 x1 = col * stride
