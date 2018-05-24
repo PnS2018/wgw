@@ -1,5 +1,5 @@
 import keras.backend as K
-from keras.layers import Input, Dense, Conv2D, MaxPooling2D, Flatten, Dropout
+from keras.layers import Conv2D, Dense, Flatten, Input, MaxPooling2D
 from keras.models import Model
 
 from utils.config import config
@@ -13,14 +13,13 @@ class ModelManager:
     def __init__(self):
         self.image_x_axis = config.IMAGE_SIZE
         self.image_y_axis = config.IMAGE_SIZE
-        self.num_channels = config.NUM_CHANNELS
 
     def get_model_v1(self):
         """
         Our model MVP
         :return: model instance
         """
-        x = Input((self.image_x_axis, self.image_y_axis, self.num_channels))
+        x = Input((self.image_x_axis, self.image_y_axis, 2))
         c1 = Conv2D(filters=20,
                     kernel_size=(7, 7),
                     padding='same',
@@ -53,7 +52,7 @@ class ModelManager:
         Model that uses f1
         :return: model instance
         """
-        x = Input((self.image_x_axis, self.image_y_axis, self.num_channels))
+        x = Input((self.image_x_axis, self.image_y_axis, 2))
         c1 = Conv2D(filters=20,
                     kernel_size=(7, 7),
                     padding='same',
@@ -86,7 +85,7 @@ class ModelManager:
         A bit more refined model
         :return: model instance
         """
-        x = Input((self.image_x_axis, self.image_y_axis, self.num_channels))
+        x = Input((self.image_x_axis, self.image_y_axis, 2))
         c1 = Conv2D(filters=20,
                     kernel_size=(7, 7),
                     strides=(2, 2),
@@ -121,7 +120,7 @@ class ModelManager:
         A bit more refined model
         :return: model instance
         """
-        x = Input((self.image_x_axis, self.image_y_axis, self.num_channels))
+        x = Input((self.image_x_axis, self.image_y_axis, 2))
         c1 = Conv2D(filters=20,
                     kernel_size=(7, 7),
                     strides=(2, 2),

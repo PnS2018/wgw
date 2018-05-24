@@ -2,8 +2,9 @@ import os
 
 import cv2
 import numpy as np
+from keras.preprocessing.image import (ImageDataGenerator, img_to_array,
+                                       load_img)
 from keras.utils import to_categorical
-from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 
 from utils.config import config
 
@@ -14,7 +15,6 @@ class DataProcessor:
     """
 
     def __init__(self):
-        self.num_classes = config.NUM_CLASSES
         self.image_size = config.IMAGE_SIZE
         self.train_waldo = config.TRAIN_WALDO
         self.train_notwaldo = config.TRAIN_NOTWALDO
@@ -66,8 +66,8 @@ class DataProcessor:
         test_X = datagen.standardize(test_x)
 
         # converting the input class labels to categorical labels for training
-        train_Y = to_categorical(train_y, num_classes=self.num_classes)
-        test_Y = to_categorical(test_y, num_classes=self.num_classes)
+        train_Y = to_categorical(train_y, num_classes=2)
+        test_Y = to_categorical(test_y, num_classes=2)
 
         return train_X, train_Y, test_X, test_Y, datagen
 
@@ -76,9 +76,9 @@ class DataProcessor:
         An augmentation function to generate augmented RGB pictures that saves them back to disk
         """
         for image in os.listdir(self.train_waldo):
-            img = load_img('{}/{}'.format(self.train_waldo, image))  # this is a PIL image
-            x = img_to_array(img)  # this is a Numpy array with shape (3, 150, 150)
-            x = x.reshape((1,) + x.shape)  # this is a Numpy array with shape (1, 3, 150, 150)
+            img = load_img('{}/{}'.format(self.train_waldo, image))
+            x = img_to_array(img)  # this is a numpy array with shape (3, 150, 150)
+            x = x.reshape((1,) + x.shape)  # this is a numpy array with shape (1, 3, 150, 150)
 
             datagen = ImageDataGenerator(
                 rotation_range=20,
@@ -108,6 +108,7 @@ class DataProcessor:
         x = np.concatenate([image[np.newaxis, :] for image in x])  # concatenate the images along the first axis
         x = x[:, :, :, np.newaxis]  # add a forth axis
 
+        # add truth values
         if label == 1:
             y = np.ones(x.shape[0])
         else:
