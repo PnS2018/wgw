@@ -61,9 +61,9 @@ class RunProcessor:
                     x1 = col * stride
                     x2 = x1 + self.image_size
                     if preds[i] == max_pred:
-                        img = cv2.rectangle(img, (x1, y1), (x2, y2), (0, 0, 255), 3)
+                        cv2.rectangle(img, (x1, y1), (x2, y2), (0, 0, 255), 3)
                     else:
-                        img = cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 3)
+                        cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 3)
                     print('Pixels: x: %d-%d, y: %d-%d, Prediction: %f' % (x1, x2, y1, y2, preds[i]))
 
         cv2.imshow('Found in total {} Waldos above our threshold {}'.format(found, self.threshold), img)
