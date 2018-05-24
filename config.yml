@@ -2,14 +2,13 @@ VERSION: 4
 MODEL_VERSION: v3
 NUM_EPOCHS: 75
 IMAGE_SIZE: 64
-NUM_CHANNELS: 1
 TRAIN_WALDO: data/64/train_waldo
 TRAIN_NOTWALDO: data/64/train_notwaldo
 TEST_WALDO: data/64/test_waldo
 TEST_NOTWALDO: data/64/test_notwaldo
 AUGMENTED_TRAIN_WALDO: data/64/augmented_train_waldo
 STRIDE: 16
-RUN_IMAGE_PATH: data/original-images/5.jpg
+RUN_IMAGE_PATH: data/original-images/1.jpg
 THRESHOLD: 0.70
 TOP_X: 10
 MEAN: 142.62315

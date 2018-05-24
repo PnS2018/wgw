@@ -19,7 +19,7 @@ class ModelManager:
         Our model MVP
         :return: model instance
         """
-        x = Input((self.image_x_axis, self.image_y_axis, 2))
+        x = Input((self.image_x_axis, self.image_y_axis, 1))
         c1 = Conv2D(filters=20,
                     kernel_size=(7, 7),
                     padding='same',
@@ -52,7 +52,7 @@ class ModelManager:
         Model that uses f1
         :return: model instance
         """
-        x = Input((self.image_x_axis, self.image_y_axis, 2))
+        x = Input((self.image_x_axis, self.image_y_axis, 1))
         c1 = Conv2D(filters=20,
                     kernel_size=(7, 7),
                     padding='same',
@@ -85,7 +85,7 @@ class ModelManager:
         A bit more refined model
         :return: model instance
         """
-        x = Input((self.image_x_axis, self.image_y_axis, 2))
+        x = Input((self.image_x_axis, self.image_y_axis, 1))
         c1 = Conv2D(filters=20,
                     kernel_size=(7, 7),
                     strides=(2, 2),
@@ -120,7 +120,7 @@ class ModelManager:
         A bit more refined model
         :return: model instance
         """
-        x = Input((self.image_x_axis, self.image_y_axis, 2))
+        x = Input((self.image_x_axis, self.image_y_axis, 1))
         c1 = Conv2D(filters=20,
                     kernel_size=(7, 7),
                     strides=(2, 2),

@@ -24,4 +24,3 @@ model.fit_generator(datagen.flow(train_x, train_Y, batch_size=64),
 model.save("version{}_epochs{}_model{}.h5".format(config.VERSION, config.NUM_EPOCHS, config.MODEL_VERSION))
 
 print("Finishing model training.")
-

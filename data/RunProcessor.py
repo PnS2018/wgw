@@ -30,8 +30,7 @@ class RunProcessor:
         x_org = self._get_image_tiles(img, stride)
 
         # allow drawing to be of color
-        img = cv2.imread(path)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
 
         # bring them into the right format for use in the model
         x = np.concatenate([image[np.newaxis, :] for image in x_org])  # concatenate the images along the first axis
@@ -67,7 +66,7 @@ class RunProcessor:
                         img = cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 3)
                     print('Pixels: x: %d-%d, y: %d-%d, Prediction: %f' % (x1, x2, y1, y2, preds[i]))
 
-        cv2.imshow('Found in total {} Waldos above our threshold {}.'.format(found, self.threshold), img)
+        cv2.imshow('Found in total {} Waldos above our threshold {}'.format(found, self.threshold), img)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
@@ -79,7 +78,7 @@ class RunProcessor:
         # amount of pixels added to the right so its dividable through size
         right = self.image_size - (img.shape[1] % self.image_size) % self.image_size
 
-        return cv2.copyMakeBorder(img, 0, bottom, 0, right, cv2.BORDER_REFLECT)
+        return cv2.copyMakeBorder(img, 0, bottom, 0, right, cv2.BORDER_WRAP)
 
     def _get_image_tiles(self, wrap, stride):
         # calculate the amount of rows by dividing by stride
