@@ -20,6 +20,6 @@ To validate our model run the script `check_precision.py`, which will give you t
 To run our project use the script `run.py` which will take an image as input and mark the cell in which it thinks Waldo can be found.
 
 ## Who to speak to?
-- Michel (miperez@ethz.ch)
-- Gina (gstoffel@ethz.ch)
-- Eric (martyer@ethz.ch)
+- Michel
+- Gina
+- Eric
